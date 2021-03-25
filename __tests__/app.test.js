@@ -48,7 +48,7 @@ describe('03_separation-of-concerns-demo routes', () => {
     expect(res.body).toEqual([order, order2]);
   });
 
-  it('returns a single order that matches a given id', async () => {
+  it('updates an order quantity', async () => {
 
     const order = await Order.insert({quantity: 10});
     const order2 = await Order.insert({quantity: 8});
