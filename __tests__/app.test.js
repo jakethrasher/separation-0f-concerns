@@ -38,17 +38,27 @@ describe('03_separation-of-concerns-demo routes', () => {
     });
   });
 
-  it('returns all orders', async () => {
+  it('gets all orders', async () => {
     const order = await Order.insert({quantity: 10});
     const order2 = await Order.insert({quantity: 8});
-    console.log(order)
+
     const res = await request(app)
       .get('/api/v1/orders')
 
     expect(res.body).toEqual([order, order2]);
   });
 
-  it('updates an order quantity', async () => {
+  it('gets an order by id', async () => {
+    const order = await Order.insert({quantity: 10});
+    const order2 = await Order.insert({quantity: 8});
+
+    const res = await request(app)
+      .get('/api/v1/orders/2')
+
+    expect(res.body).toEqual([order2]);
+  });
+
+  it('updates an order', async () => {
 
     const order = await Order.insert({quantity: 10});
     const order2 = await Order.insert({quantity: 8});
