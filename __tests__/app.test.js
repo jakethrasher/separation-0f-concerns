@@ -40,13 +40,43 @@ describe('03_separation-of-concerns-demo routes', () => {
 
   it('returns all orders', async () => {
     const order = await Order.insert({quantity: 10});
-
+    const order2 = await Order.insert({quantity: 8});
+    console.log(order)
     const res = await request(app)
       .get('/api/v1/orders')
 
-    expect(res.body).toEqual([{
-     ...order
-    }]);
+    expect(res.body).toEqual([order, order2]);
   });
 
+  it('returns a single order that matches a given id', async () => {
+
+    const order = await Order.insert({quantity: 10});
+    const order2 = await Order.insert({quantity: 8});
+    
+    const res = await request(app)
+      .put('/api/v1/orders/2')
+      .send({quantity:13})
+
+    const updatedResponse = await request(app)
+      .get('/api/v1/orders/2')
+    expect(res.body).toEqual(updatedResponse.body);
+  });
+
+  it('deletes an order of matching id', async () => {
+
+    const order = await Order.insert({quantity: 10});
+    const order2 = await Order.insert({quantity: 8});
+    
+    const res = await request(app)
+      .delete('/api/v1/orders/2')
+
+    const updatedResponse = await request(app)
+      .get('/api/v1/orders/2')
+
+    const databaseSize = await request(app)
+      .get('/api/v1/orders')
+
+    expect(updatedResponse.body).toEqual([]);
+    expect(res.body).toEqual(order2);
+  });
 });
